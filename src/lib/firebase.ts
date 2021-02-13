@@ -4,7 +4,7 @@ import "firebase/auth";
 import Constants from "expo-constants";
 /* types */
 import { Shop } from "../types/shop";
-import { Review } from "../types/shop";
+import { Review } from "../types/review";
 import { initialUser, User } from "../types/user";
 
 if (!firebase.apps.length) {
@@ -12,18 +12,15 @@ if (!firebase.apps.length) {
 }
 
 export const getShops = async () => {
-  try {
     const snapshot = await firebase
       .firestore()
       .collection("shops")
       .orderBy("score", "desc")
       .get();
-    const shops = snapshot.docs.map((doc) => {...doc.data(), id: document.id} as Shop);
+    const shops = snapshot.docs.map(
+      (doc) => ({...doc.data(), id: document.id} as Shop)
+      );
   return shops;
-} catch (err) {
-  console.log(err);
-  return [];
-}
 };
 
 export const signin = async () => {
@@ -69,10 +66,9 @@ export const uploadImage = async (uri: string, path: string) => {
 
   try {
     await ref.put(blob);
-    downloadUri = await ref.getDownloadURL();
+    downloadUrl = await ref.getDownloadURL();
   } catch (err) {
     console.log(err);
   }
-
   return downloadUrl;
 }

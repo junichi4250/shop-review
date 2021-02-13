@@ -15,6 +15,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/navigation";
 import { RouteProp } from "@react-navigation/native";
 import { createReviewRef, uploadImage } from "../lib/firebase";
+import { Review} from "../types/review";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "CreateReview">;
@@ -29,14 +30,22 @@ export const CreateReviewScreen: React.FC<Props> = ({
   const [text, setText] = useState<string>("");
   const [score, setScore] = useState<number>(3);
   const [imageUri, setImageUri] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
     navigation.setOptions({
       title: shop.name,
+      headerLeft: () => (
+        <IconButton onPress={() => navigation.goBack()} name="x" />
+      ),
     });
-  }, [navigation, shop]);
+  }, [shop]);
+
+  const onPickImage = async () => {
+    const uri = await pickImage();
+    setImageUri(uri);
+  }
 
   const onSubmit = async () => {
     if (!text || !imageUri) {
@@ -44,47 +53,44 @@ export const CreateReviewScreen: React.FC<Props> = ({
       return;
     }
     setLoading(true);
-    const reviewDocRef = await createReviewRef(shop.id);
 
+    // documentのidを先に取得
+    const reviewDocRef = await createReviewRef(shop.id);
     // storageのPathを決定
     const ext = getExtention(imageUri);
     const storagePath = `reviews/${reviewDocRef.id}.${ext}`
-
+    // 画像をstorageにアップロード
     const downloadUrl = await uploadImage(imageUri, storagePath);
-
+    // firestoreに保存する
     const review = {
       user: {
-        name: user.id,
-        id: user.id
+        name: user.name,
       },
       shop: {
         name: shop.name,
-        id: shop.id
       },
       text,
       score,
       imageUrl: downloadUrl,
       updatedAt: firebase.firestore.Timestamp.now(),
       createdAt: firebase.firestore.Timestamp.now(),
-    }; as Review
+    } as Review;
     await reviewDocRef.set(review);
+
     setLoading(false);
     navigation.goBack();
   };
-
-  const onPickImage = async () => {
-    const uri = await pickImage();
-    setImageUri(uri);
-  }
 
   return (
     <SafeAreaView style={styles.container}>
       <StarInput score={score} onChangeScore={(value) => setScore(value)} />
       <TextArea value={text} onChangeText={(value) => setText(value)} label="レビュー" placeholder="レビューを書いてください" />
+      <View style={styles.photoContainer}>
       <IconButton name="camera" onPress={onPickImage} color="#ccc" />
       {!!imageUri && (
         <Image source={{ uri: imageUri }} style={styles.image} />
       )}
+      </View>
       <Button text="レビューを投稿する" onPress={onSubmit} />
       <Loading visible={loading} />
     </SafeAreaView>
@@ -95,6 +101,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  photoContainer: {
+    margin: 8,
   },
   image: {
     width: 100,
