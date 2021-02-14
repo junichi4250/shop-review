@@ -5,11 +5,13 @@ import { MainTabNavigator } from "./MainTabNavigator";
 /* screents */
 import { AuthScreen } from "../screens/AuthScreen";
 
+import {UserContext} from "../contexts/userContext";
+
 export const AppNavigator = () => {
     const {user} = useContext(UserContext);
     return (
         <NavigationContainer>
-            {!user ? <AuthScreen /> : <MainTabNavigator />}
+            {user ? <AuthScreen /> : <MainTabNavigator />}
         </NavigationContainer>
     );
 }

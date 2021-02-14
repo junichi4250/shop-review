@@ -13,7 +13,7 @@ export const StarInput: React.FC<Props> = ({
     score,
     starSize,
     onChangeScore,
-}; Props) => {
+}: Props) => {
     const starStyle = [styles.star, starSize && { fontSize: starSize }];
 
     const stars = [1, 2, 3, 4, 5].map((starCount) => (
@@ -21,15 +21,14 @@ export const StarInput: React.FC<Props> = ({
             onPress={() => onChangeScore(starCount)}
             key={starCount.toString()}>
             <FontAwesome
-                style={starStyle}
+                styles={starStyle}
                 name={score >= starCount ? "star" : "star-o"}
             />
         </TouchableOpacity>
-
     ));
 
-    return <View style={StyleSheet.container}>{stars}</View>;
-}
+    return <View style={styles.container}>{stars}</View>;
+};
 
 const styles = StyleSheet.create({
     container: {

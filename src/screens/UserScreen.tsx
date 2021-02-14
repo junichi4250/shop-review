@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, SafeAreaView, Text } from "react-native";
 import { updateUser } from "../lib/firebase";
-import firebase from ""
+import firebase from "firebase";
 import { Form } from "../components/Form";
 import { Button } from "../components/Button";
 import { Loading } from "../components/Loading";
 
-import { UserContext } from "../conTexts/userContext";
+import { UserContext } from "../contexts/userContext";
 /* types */
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/navigation";
@@ -18,18 +18,19 @@ type Props = {
 };
 
 export const UserScreen: React.FC<Props> = ({ navigation, route }: Props) => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [name, setName] = useState<string>(user.name);
-  const [loading, setloading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = async () => {
-    setloading(true);
+    setLoading(true);
     const updatedAt = firebase.firestore.Timestamp.now();
     // name = name: nameの省略記法
-    await updateUser(user.id, { name });
+    await updateUser(user.id, { name, updatedAt });
     setUser({ ...user, name, updatedAt });
-    setloading(false);
+    setLoading(false);
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <Form value={name} onChangeText={(text) => { setName(text) }} label="名前" />

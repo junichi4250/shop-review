@@ -18,14 +18,14 @@ export const getShops = async () => {
       .orderBy("score", "desc")
       .get();
     const shops = snapshot.docs.map(
-      (doc) => ({...doc.data(), id: document.id} as Shop)
+      (doc) => ({...doc.data(), id: doc.id} as Shop)
       );
   return shops;
 };
 
 export const signin = async () => {
-  const userCredintial = await firebase.auth().signInAnonymously();
-  const { uid } = userCredintial.user;
+  const userCredential = await firebase.auth().signInAnonymously();
+  const { uid } = userCredential.user;
   const userDoc = await firebase.firestore().collection("users").doc(uid).get();
   if (!userDoc.exists) {
     await firebase.firestore().collection("users").doc(uid).set(initialUser);
@@ -71,4 +71,17 @@ export const uploadImage = async (uri: string, path: string) => {
     console.log(err);
   }
   return downloadUrl;
-}
+};
+
+export const getReviews = async (shopId: string) => {
+  const reviewDocs = await firebase
+  .firestore()
+  .collection("shops")
+  .doc(shopId)
+  .collection("reviews")
+  .orderBy("createdAt", "desc")
+  .get();
+  return reviewDocs.docs.map(
+    (doc) => ({...doc.data(), id: doc.id} as Review)
+  );
+};

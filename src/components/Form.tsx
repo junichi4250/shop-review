@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, TextInput, Text } from "react-native";
 
 type Props = {
-    onChangeText: { text: string } => void;
+    onChangeText: ( text: string ) => void;
     value: string;
     label: string;
 }
@@ -13,10 +13,10 @@ export const Form: React.FC<Props> = ({
     label
 }: Props) => {
     return (
-        <View style={StyleSheet.container}>
-            <Text style={StyleSheet.label}>{label}</Text>
+        <View style={styles.container}>
+            <Text style={styles.label}>{label}</Text>
             <TextInput
-                style={StyleSheet.input}
+                style={styles.input}
                 onChangeText={(text) => onChangeText(text)}
                 value={value}
             />
