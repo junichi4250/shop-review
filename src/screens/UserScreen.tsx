@@ -33,8 +33,14 @@ export const UserScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Form value={name} onChangeText={(text) => { setName(text) }} label="名前" />
-      <Button onPress={() => { }} text="保存する" />
+      <Form
+        value={name}
+        onChangeText={(text) => {
+          setName(text);
+        }}
+        label="名前"
+      />
+      <Button onPress={onSubmit} text="保存する" />
       <Loading visible={loading} />
     </SafeAreaView>
   );

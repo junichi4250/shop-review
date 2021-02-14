@@ -39,10 +39,8 @@ export const ShopScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       <FlatList
         ListHeaderComponent={<ShopDetail shop={shop} />}
         data={reviews}
-        renderItem={({ item }: { item: Review }) => (
-          <ReviewItem review={item} />
-        )}
-        keyExtractor={(item: Review) => item.id}
+        renderItem={({ item }) => <ReviewItem review={item} />}
+        keyExtractor={(item) => item.id}
       />
       <FloatingActionButton
         iconName="plus"

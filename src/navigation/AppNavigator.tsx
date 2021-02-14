@@ -1,17 +1,18 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 /* navigators */
 import { MainTabNavigator } from "./MainTabNavigator";
 /* screents */
 import { AuthScreen } from "../screens/AuthScreen";
 
-import {UserContext} from "../contexts/userContext";
+import { UserContext } from "../contexts/userContext";
 
 export const AppNavigator = () => {
-    const {user} = useContext(UserContext);
-    return (
-        <NavigationContainer>
-            {user ? <AuthScreen /> : <MainTabNavigator />}
-        </NavigationContainer>
-    );
-}
+  const { user } = useContext(UserContext);
+
+  return (
+    <NavigationContainer>
+      {!user ? <AuthScreen /> : <MainTabNavigator />}
+    </NavigationContainer>
+  );
+};

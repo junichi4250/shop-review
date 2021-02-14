@@ -12,26 +12,28 @@ if (!firebase.apps.length) {
 }
 
 export const getShops = async () => {
-    const snapshot = await firebase
-      .firestore()
-      .collection("shops")
-      .orderBy("score", "desc")
-      .get();
-    const shops = snapshot.docs.map(
-      (doc) => ({...doc.data(), id: doc.id} as Shop)
-      );
+  const snapshot = await firebase
+    .firestore()
+    .collection("shops")
+    .orderBy("score", "desc")
+    .get();
+  const shops = snapshot.docs.map(
+    (doc) => ({ ...doc.data(), id: doc.id } as Shop)
+  );
   return shops;
 };
 
+// ログイン時にユーザー作成
 export const signin = async () => {
   const userCredential = await firebase.auth().signInAnonymously();
+  console.log(userCredential);
   const { uid } = userCredential.user;
   const userDoc = await firebase.firestore().collection("users").doc(uid).get();
   if (!userDoc.exists) {
     await firebase.firestore().collection("users").doc(uid).set(initialUser);
     return {
       ...initialUser,
-      id: uid
+      id: uid,
     } as User;
   } else {
     return {
@@ -50,10 +52,9 @@ export const createReviewRef = async (shopId: string) => {
     .firestore()
     .collection("shops")
     .doc(shopId)
-    .collection("review")
+    .collection("reviews")
     .doc();
 };
-
 
 // storageに画像をuploadしてstorage上のurlを返す
 export const uploadImage = async (uri: string, path: string) => {
@@ -75,13 +76,13 @@ export const uploadImage = async (uri: string, path: string) => {
 
 export const getReviews = async (shopId: string) => {
   const reviewDocs = await firebase
-  .firestore()
-  .collection("shops")
-  .doc(shopId)
-  .collection("reviews")
-  .orderBy("createdAt", "desc")
-  .get();
+    .firestore()
+    .collection("shops")
+    .doc(shopId)
+    .collection("reviews")
+    .orderBy("createdAt", "desc")
+    .get();
   return reviewDocs.docs.map(
-    (doc) => ({...doc.data(), id: doc.id} as Review)
+    (doc) => ({ ...doc.data(), id: doc.id } as Review)
   );
 };

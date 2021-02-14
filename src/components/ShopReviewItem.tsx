@@ -1,4 +1,3 @@
-  
 import React from "react";
 import {
   View,
@@ -29,7 +28,6 @@ export const ShopReviewItem: React.FC<Props> = ({ shop, onPress }: Props) => {
       <Image source={{ uri: imageUrl }} style={styles.image} />
       <Text style={styles.nameText}>{name}</Text>
       <Text style={styles.placeText}>{place}</Text>
-      
     </TouchableOpacity>
   );
 };

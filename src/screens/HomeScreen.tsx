@@ -7,13 +7,13 @@ import { ShopReviewItem } from "../components/ShopReviewItem";
 /* types */
 import { Shop } from "../types/shop";
 
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/navigation";
 
 // HomeScreenが受け取るPropsを定義
 type Props = {
-    navigation: StackNavigationProp<RootStackParamList, "Home">
-}
+  navigation: StackNavigationProp<RootStackParamList, "Home">;
+};
 
 export const HomeScreen = ({ navigation }: Props) => {
   const [shops, setShops] = useState<Shop[]>([]);
@@ -29,14 +29,14 @@ export const HomeScreen = ({ navigation }: Props) => {
 
   const onPressShop = (shop: Shop) => {
     navigation.navigate("Shop", { shop });
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={shops}
         renderItem={({ item }: { item: Shop }) => (
-          <ShopReviewItem shop={item} onPress={() => onPressShop(item)}/>
+          <ShopReviewItem shop={item} onPress={() => onPressShop(item)} />
         )}
         keyExtractor={(item, index) => index.toString()}
         numColumns={2}
