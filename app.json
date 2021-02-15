@@ -30,6 +30,10 @@
         "measurementId": "G-3DJJ4RQB39"
       }
     },
+    "algolia": {
+      "appId": "U3IMR71OD8",
+      "searchApiKey": "92d70876adbfd0f3332ff27953ca8a51",
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
